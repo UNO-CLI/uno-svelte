@@ -1,14 +1,16 @@
 <script lang="ts">
   import { connectWebSocket } from '../stores/websocketStore';
+  import { navigate } from 'svelte-routing';
   let playerName: string = '';
-  let roomCode: string = '';
+  let roomId: string = '';
 
   const handleSubmit = (event: Event) => {
     event.preventDefault();
-    const queryParams = `room_code=${roomCode}&player_name=${playerName}`;
+    const queryParams = `room_id=${roomId}&player_name=${playerName}`;
     const websocketUrl = `ws://localhost:8000/join?${queryParams}`;
     console.log('Connecting to WebSocket:', websocketUrl);
     connectWebSocket(websocketUrl);
+    navigate('/game');
   };
 </script>
 
@@ -60,8 +62,8 @@
       <input type="text" id="playerName" class="nes-input" bind:value={playerName} required />
     </div>
     <div class="nes-field">
-      <label for="roomCode">Room Code:</label>
-      <input type="text" id="roomCode" class="nes-input" bind:value={roomCode} required />
+      <label for="roomId">Room Code:</label>
+      <input type="text" id="roomId" class="nes-input" bind:value={roomId} required />
     </div>
     <button type="submit" class="nes-btn is-primary">Join Room</button>
   </form>
