@@ -4,15 +4,20 @@
     import { websocket } from '../stores/websocketStore';
     import { onMount } from 'svelte';
   
-    let gameData: any = null; // Define your game state structure here
+    let gameState: any = null; // Define your game state structure here
+    let connectionDTO: any = null; // Define your game state structure here
   
     onMount(() => {
       const unsubscribe = websocket.subscribe((socket) => {
         if (socket) {
           socket.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            // Update gameData with incoming data from WebSocket
-            gameData = data;
+            const incomingData = JSON.parse(event.data);
+
+            if (incomingData.type = 'connection') {
+              connectionDTO= incomingData;
+            } else if(incomingData.type = 'sync') {
+              gameState = incomingData;
+            }
           };
         }
       });
@@ -22,7 +27,11 @@
   </script>
   
   <div class="container">
-    <h1>{JSON.stringify(gameData)}</h1>
+    <h1>{JSON.stringify(connectionDTO)}</h1>
+  </div>
+
+  <div class="container">
+    <h1>{JSON.stringify(gameState)}</h1>
   </div>
   
   <style>
